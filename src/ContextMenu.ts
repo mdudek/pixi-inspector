@@ -1,21 +1,23 @@
-import * as PIXI from "pixi.js";
+import { AbstractRenderer, Renderer, RenderTexture, Texture } from "@pixi/core";
+import { Container, DisplayObject } from "@pixi/display";
+import { Sprite } from "@pixi/sprite";
 
 export interface IContextMenuData {
-    target: PIXI.DisplayObject;
+    target: DisplayObject;
     children: IContextMenuData[];
-    texture?: PIXI.Texture;
+    texture?: Texture;
 }
 
 export class ContextMenu {
 
     private readonly _data: IContextMenuData;
     private readonly _root: HTMLElement;
-    private readonly _renderer: PIXI.AbstractRenderer;
+    private readonly _renderer: AbstractRenderer;
     private readonly _style: string;
     private readonly _inspect = new Function("console.dir(this); debugger;");
     private _textureImage?: HTMLElement;
 
-    constructor(event: MouseEvent, renderer: PIXI.AbstractRenderer, data: IContextMenuData, style: string) {
+    constructor(event: MouseEvent, renderer: AbstractRenderer, data: IContextMenuData, style: string) {
 
         const div = document.createElement("div");
         div.style.position = "fixed";
@@ -71,14 +73,14 @@ export class ContextMenu {
     private getItemName(data: IContextMenuData, id: string): string {
         let name = `<span>${this.getClassName(data.target)}</span>`;
         const texture = (data.target as {
-            texture?: PIXI.Texture;
+            texture?: Texture;
         }).texture;
-        if (texture instanceof PIXI.Texture) {
+        if (texture instanceof Texture) {
             data.texture = texture;
             name += `<span>:&nbsp;</span><span data-texture="${id}">${
-                texture === PIXI.Texture.EMPTY ? "<u>empty</u>" :
-                    texture === PIXI.Texture.WHITE ? "<u>white</u>" :
-                        texture instanceof PIXI.RenderTexture ? "<u>rendered</u>" :
+                texture === Texture.EMPTY ? "<u>empty</u>" :
+                    texture === Texture.WHITE ? "<u>white</u>" :
+                        texture instanceof RenderTexture ? "<u>rendered</u>" :
                             texture.textureCacheIds && texture.textureCacheIds.length > 0 ?
                                 texture.textureCacheIds.slice(0, 2).map(it => `<u>${it}</u>`).join(",&nbsp") :
                                 "<u>unnamed</u>"
@@ -87,7 +89,7 @@ export class ContextMenu {
         return name;
     }
 
-    private getClassName(obj: PIXI.DisplayObject): string {
+    private getClassName(obj: DisplayObject): string {
         let className: string | undefined;
         if (obj.constructor) {
             if ((obj.constructor as any).name) {
@@ -129,15 +131,15 @@ export class ContextMenu {
         }
         const data = this.getData(this._data, ids);
         if (data?.texture) {
-            const renderer = this._renderer as PIXI.Renderer;
+            const renderer = this._renderer as Renderer;
             if (renderer && renderer.extract && typeof renderer.extract.image === "function") {
 
                 const vw = 12;
                 const size = window.innerWidth * vw / 100;
-                const sprite = new PIXI.Sprite(data.texture);
+                const sprite = new Sprite(data.texture);
                 const scale = Math.min(1, size / sprite.width, size / sprite.height);
                 sprite.scale.set(scale);
-                const container = new PIXI.Container();
+                const container = new Container();
                 container.addChild(sprite);
 
                 const canvas = renderer.extract.canvas(container);

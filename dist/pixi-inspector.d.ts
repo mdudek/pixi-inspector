@@ -1,4 +1,5 @@
-import * as PIXI from "pixi.js";
+import { AbstractRenderer } from "@pixi/core";
+import { Container } from "@pixi/display";
 export declare class PixiInspector {
     private readonly _root;
     private readonly _renderer;
@@ -8,7 +9,7 @@ export declare class PixiInspector {
     private readonly _style;
     private _enabled;
     private _contextMenu?;
-    constructor(root: PIXI.Container, renderer: PIXI.AbstractRenderer, style?: "dark" | "light");
+    constructor(root: Container, renderer: AbstractRenderer, style?: "dark" | "light");
     get enabled(): boolean;
     set enabled(value: boolean);
     private disablePixiRightClick;

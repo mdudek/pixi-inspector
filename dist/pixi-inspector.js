@@ -1,4 +1,4 @@
-(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?f(exports,require('pixi.js')):typeof define==='function'&&define.amd?define(['exports','pixi.js'],f):(g=typeof globalThis!=='undefined'?globalThis:g||self,f(g['pixi-inspector']={},g.PIXI));}(this,(function(exports, PIXI){'use strict';function _interopNamespace(e){if(e&&e.__esModule)return e;var n=Object.create(null);if(e){Object.keys(e).forEach(function(k){if(k!=='default'){var d=Object.getOwnPropertyDescriptor(e,k);Object.defineProperty(n,k,d.get?d:{enumerable:true,get:function(){return e[k];}});}});}n['default']=e;return Object.freeze(n);}var PIXI__namespace=/*#__PURE__*/_interopNamespace(PIXI);var ContextMenu = /** @class */ (function () {
+(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?f(exports,require('@pixi/display'),require('@pixi/math'),require('@pixi/core'),require('@pixi/sprite')):typeof define==='function'&&define.amd?define(['exports','@pixi/display','@pixi/math','@pixi/core','@pixi/sprite'],f):(g=typeof globalThis!=='undefined'?globalThis:g||self,f(g["pixi-inspector"]={},g.display,g.math,g.core,g.sprite));})(this,(function(exports,display,math,core,sprite){'use strict';var ContextMenu = /** @class */ (function () {
     function ContextMenu(event, renderer, data, style) {
         var _this = this;
         this._inspect = new Function("console.dir(this); debugger;");
@@ -47,11 +47,11 @@
     ContextMenu.prototype.getItemName = function (data, id) {
         var name = "<span>" + this.getClassName(data.target) + "</span>";
         var texture = data.target.texture;
-        if (texture instanceof PIXI__namespace.Texture) {
+        if (texture instanceof core.Texture) {
             data.texture = texture;
-            name += "<span>:&nbsp;</span><span data-texture=\"" + id + "\">" + (texture === PIXI__namespace.Texture.EMPTY ? "<u>empty</u>" :
-                texture === PIXI__namespace.Texture.WHITE ? "<u>white</u>" :
-                    texture instanceof PIXI__namespace.RenderTexture ? "<u>rendered</u>" :
+            name += "<span>:&nbsp;</span><span data-texture=\"" + id + "\">" + (texture === core.Texture.EMPTY ? "<u>empty</u>" :
+                texture === core.Texture.WHITE ? "<u>white</u>" :
+                    texture instanceof core.RenderTexture ? "<u>rendered</u>" :
                         texture.textureCacheIds && texture.textureCacheIds.length > 0 ?
                             texture.textureCacheIds.slice(0, 2).map(function (it) { return "<u>" + it + "</u>"; }).join(",&nbsp") :
                             "<u>unnamed</u>") + "</span>";
@@ -104,11 +104,11 @@
             if (renderer && renderer.extract && typeof renderer.extract.image === "function") {
                 var vw = 12;
                 var size = window.innerWidth * vw / 100;
-                var sprite = new PIXI__namespace.Sprite(data.texture);
-                var scale = Math.min(1, size / sprite.width, size / sprite.height);
-                sprite.scale.set(scale);
-                var container = new PIXI__namespace.Container();
-                container.addChild(sprite);
+                var sprite$1 = new sprite.Sprite(data.texture);
+                var scale = Math.min(1, size / sprite$1.width, size / sprite$1.height);
+                sprite$1.scale.set(scale);
+                var container = new display.Container();
+                container.addChild(sprite$1);
                 var canvas = renderer.extract.canvas(container);
                 var rootRect = this._root.getBoundingClientRect();
                 var itemRect = span.parentElement.getBoundingClientRect();
@@ -146,7 +146,7 @@ var StyleSheet = "\n    .pixi-inspector-context-menu,\n    .pixi-inspector-conte
 var PixiInspector = /** @class */ (function () {
     function PixiInspector(root, renderer, style) {
         var _this = this;
-        this._tempRect = new PIXI__namespace.Rectangle();
+        this._tempRect = new math.Rectangle();
         this._enabled = false;
         this.disablePixiRightClick = function (event) {
             if (event.target === _this._renderer.view) {
@@ -214,7 +214,7 @@ var PixiInspector = /** @class */ (function () {
         return point;
     };
     PixiInspector.prototype.flattenDescendants = function (target, result) {
-        if (target instanceof PIXI__namespace.Container && target.children.length > 0) {
+        if (target instanceof display.Container && target.children.length > 0) {
             for (var _i = 0, _a = target.children; _i < _a.length; _i++) {
                 var child = _a[_i];
                 this.flattenDescendants(child, result);
@@ -273,4 +273,4 @@ var PixiInspector = /** @class */ (function () {
         return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     };
     return PixiInspector;
-}());exports.PixiInspector=PixiInspector;Object.defineProperty(exports,'__esModule',{value:true});})));
+}());exports.PixiInspector=PixiInspector;Object.defineProperty(exports,'__esModule',{value:true});}));

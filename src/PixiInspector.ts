@@ -1,20 +1,23 @@
-import * as PIXI from "pixi.js";
+import { AbstractRenderer } from "@pixi/core";
+import { Container, DisplayObject } from "@pixi/display";
+import { InteractionManager } from "@pixi/interaction";
+import { IPointData, Rectangle } from "@pixi/math";
 import {ContextMenu, IContextMenuData} from "./ContextMenu";
 import {StyleSheet} from "./StyleSheet";
 
 export class PixiInspector {
 
-    private readonly _root: PIXI.Container;
-    private readonly _renderer: PIXI.AbstractRenderer;
-    private readonly _interaction: PIXI.InteractionManager;
-    private readonly _tempRect = new PIXI.Rectangle();
+    private readonly _root: Container;
+    private readonly _renderer: AbstractRenderer;
+    private readonly _interaction: InteractionManager;
+    private readonly _tempRect = new Rectangle();
     private readonly _styleSheet: HTMLStyleElement;
     private readonly _style: string;
     private _enabled = false;
     private _contextMenu?: ContextMenu;
 
-    constructor(root: PIXI.Container,
-                renderer: PIXI.AbstractRenderer,
+    constructor(root: Container,
+                renderer: AbstractRenderer,
                 style?: "dark" | "light") {
         this._root = root;
         this._renderer = renderer;
@@ -83,8 +86,8 @@ export class PixiInspector {
         return point;
     }
 
-    private flattenDescendants(target: PIXI.DisplayObject, result: PIXI.DisplayObject[]) {
-        if (target instanceof PIXI.Container && target.children.length > 0) {
+    private flattenDescendants(target: DisplayObject, result: DisplayObject[]) {
+        if (target instanceof Container && target.children.length > 0) {
             for (const child of target.children) {
                 this.flattenDescendants(child, result);
             }
@@ -94,7 +97,7 @@ export class PixiInspector {
         return result;
     }
 
-    private getContextMenuData(point: PIXI.IPointData, target: PIXI.DisplayObject): IContextMenuData | undefined {
+    private getContextMenuData(point: IPointData, target: DisplayObject): IContextMenuData | undefined {
         const sprites = this.flattenDescendants(target, []).filter(it => {
             const rect = it.getBounds(false, this._tempRect);
             return point.x >= rect.x && point.x <= rect.x + rect.width &&
