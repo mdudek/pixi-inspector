@@ -1,5 +1,10 @@
 // language=CSS
 export const StyleSheet = `
+
+    .pixi-inspector-context-anchor {
+        overflow-y: auto;
+    }
+    
     .pixi-inspector-context-menu,
     .pixi-inspector-context-menu ul {
         list-style: none;
