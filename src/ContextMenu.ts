@@ -21,6 +21,7 @@ export class ContextMenu {
 
         const div = document.createElement("div");
         div.style.position = "fixed";
+        div.style.zIndex = "1";
         div.className = "pixi-inspector-context-anchor";
         document.body.append(div);
 

@@ -4,6 +4,7 @@
         this._inspect = new Function("console.dir(this); debugger;");
         var div = document.createElement("div");
         div.style.position = "fixed";
+        div.style.zIndex = "1";
         div.className = "pixi-inspector-context-anchor";
         document.body.append(div);
         var ul = document.createElement("ul");
